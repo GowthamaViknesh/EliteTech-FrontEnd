@@ -1,24 +1,27 @@
-import logo from './logo.svg';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import StudentRegisterForm from './Components/StudentRegisterForm';
+import { Toaster } from 'react-hot-toast';
+import Context from './Context/context';
+import StudentDetails from './Pages/StudentDetails';
+import Navbar from './Components/Navbar';
+import SelectedStudentForm from './Pages/SelectedStudentDetails';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <Navbar />
+        <Context>
+          <Toaster position='top-center' reverseOrder={false} />
+          <Routes>
+            <Route path='/' element={<StudentRegisterForm />} />
+            <Route path='/studentDetails' element={<StudentDetails />} />
+            <Route path='/selectedStudent' element={<SelectedStudentForm />} />
+          </Routes>
+        </Context>
+      </BrowserRouter>
+    </>
   );
 }
 

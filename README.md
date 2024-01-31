@@ -1,70 +1,223 @@
-# Getting Started with Create React App
+// const handleShowDetails = async () => {
+// try {
+// await axios.get('http://localhost:4000/api/studentDetail').then((res) => {
+// const isTopClass = percentage > 90;
+// setDetails([
+// ...details,
+// { name, email, phone, address, percentage, topClass: isTopClass },
+// ]);
+// toast.success('Here are the details', {
+// icon: '✨',
+// style: {
+// borderRadius: '10px',
+// background: '#333',
+// color: '#fff',
+// },
+// });
+// });
+// } catch (error) {
+// console.log(`Error: ${error}`);
+// toast.error('Something went Wrong!', {
+// icon: '⚠️',
+// style: {
+// borderRadius: '10px',
+// background: '#333',
+// color: '#fff',
+// },
+// });
+// }
+// };
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+useEffect(() => {
+const fetchStudentDetails = async () => {
+try {
+if (selectedStudent) {
+const response = await axios.get(
+`http://localhost:4000/api/studentDetails/${selectedStudent}`
+);
 
-## Available Scripts
+          if (response.data.status) {
+            const { email, phone, address, percentage } = response.data.data;
+            setSelectedStudentDetails({ email, phone, address, percentage });
+          } else {
+            console.error(
+              'Error fetching student details:',
+              response.data.message
+            );
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching student details:', error);
+      }
+    };
 
-In the project directory, you can run:
+    fetchStudentDetails();
 
-### `npm start`
+}, [selectedStudent]);
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+const handleSubmit = async (e) => {
+e.preventDefault();
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    try {
+      if (selectedStudent) {
+        const response = await axios.put(
+          `http://localhost:4000/api/studentDetails/${selectedStudent}`,
+          {
+            email,
+            phone,
+            address,
+            percentage,
+          }
+        );
 
-### `npm test`
+        if (response.data.status) {
+          console.log(
+            'Student details updated successfully:',
+            response.data.message
+          );
+          setSelectedStudent('');
+          setSelectedStudentDetails(null);
+        } else {
+          console.error(
+            'Error updating student details:',
+            response.data.message
+          );
+        }
+      } else {
+        const response = await axios.post(
+          'http://localhost:4000/api/selectedStudent',
+          {
+            name: selectedStudent,
+            email,
+            phone,
+            address,
+            percentage,
+          }
+        );
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+        if (response.data.status) {
+          console.log(
+            'Student details created successfully:',
+            response.data.message
+          );
+          setSelectedStudent('');
+          setSelectedStudentDetails(null);
+        } else {
+          console.error(
+            'Error creating student details:',
+            response.data.message
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
 
-### `npm run build`
+};
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+// <div className='container' style={{ marginTop: '100px' }}>
+// <div className='row'>
+// <div className='col-md-6'>
+// <h2 className='mb-4'>Selected Student Form</h2>
+// <form onSubmit={''}>
+// <div className='mb-3'>
+// <label className='form-label'>Student Name:</label>
+// <select
+// style={{ width: '400px', borderRadius: '1px solid black' }}
+// className='form-select'
+// value={selectedStudent}
+// onChange={(e) => handleStudentSelect(e.target.value)}
+// >
+// <option value=''>Select a student</option>
+// {studentNames.map((name) => (
+// <option key={name._id} value={name._id}>
+// {name.name}
+// </option>
+// ))}
+// </select>
+// </div>
+// <div className='mb-3'>
+// <label className='form-label'>Email:</label>
+// <input
+// type='text'
+// className='form-control'
+// value={email}
+// style={{ width: '400px', borderRadius: '1px solid black' }}
+// onChange={(e) => setEmail(e.target.value)}
+// />
+// </div>
+// <div className='mb-3'>
+// <label className='form-label'>Phone:</label>
+// <input
+// type='text'
+// style={{ width: '400px' }}
+// className='form-control'
+// value={phone}
+// onChange={(e) => setPhone(e.target.value)}
+// />
+// </div>
+// <div className='mb-3'>
+// <label className='form-label'>Address:</label>
+// <input
+// type='text'
+// style={{ width: '400px' }}
+// className='form-control'
+// value={address}
+// onChange={(e) => setAddress(e.target.value)}
+// />
+// </div>
+// <div className='mb-3'>
+// <label className='form-label'>Percentage:</label>
+// <input
+// type='text'
+// style={{ width: '400px' }}
+// className='form-control'
+// value={percentage}
+// onChange={(e) => setPercentage(e.target.value)}
+// />
+// </div>
+// <button type='submit' className='btn btn-primary'>
+// Create Record
+// </button>
+// </form>
+// </div>
+// <div className='col-md-6 '>
+// <div className='table-content text-center'>
+// <h3>Selected Student Details</h3>
+// {selectedStudentDetails ? (
+// <table className='table table-bordered table-hover custom-table '>
+// <thead className='text-start table-dark'>
+// <tr>
+// <th>Email</th>
+// <th>Phone</th>
+// <th>Address</th>
+// <th>Percentage</th>
+// <th>Edit</th>
+// <th>Delete</th>
+// </tr>
+// </thead>
+// <tbody>
+// <tr className='text-start'>
+// <td>{selectedStudentDetails.email}</td>
+// <td>{selectedStudentDetails.phone}</td>
+// <td>{selectedStudentDetails.address}</td>
+// <td>{selectedStudentDetails.percentage}</td>
+// <td>
+// <FontAwesomeIcon icon={faEdit} />
+// </td>
+// <td>
+// <FontAwesomeIcon icon={faTrash} color='red' />
+// </td>
+// </tr>
+// </tbody>
+// </table>
+// ) : (
+// <>
+// <p>No Records to Show</p>
+// <h5>Create a new Record</h5>
+// </>
+// )}
+// </div>
+// </div>
+// </div>
+// </div>
