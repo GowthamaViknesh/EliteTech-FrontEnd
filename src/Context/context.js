@@ -29,26 +29,28 @@ const Context = ({ children }) => {
 
   const handleShowDetails = async () => {
     try {
-      await axios.get('http://localhost:4000/api/studentDetail').then((res) => {
-        const serverDetails = res.data.data;
+      await axios
+        .get('https://elite-nwwo.onrender.com/api/studentDetail')
+        .then((res) => {
+          const serverDetails = res.data.data;
 
-        // Assuming the server response has an array of student details
-        const updatedDetails = serverDetails.map((student) => ({
-          ...student,
-          topClass: student.percentage > 90,
-        }));
+          // Assuming the server response has an array of student details
+          const updatedDetails = serverDetails.map((student) => ({
+            ...student,
+            topClass: student.percentage > 90,
+          }));
 
-        setDetails(updatedDetails);
+          setDetails(updatedDetails);
 
-        toast.success('Welcome to Elite Tech Park Program', {
-          icon: '✨',
-          style: {
-            borderRadius: '10px',
-            background: '#333',
-            color: '#fff',
-          },
+          toast.success('Welcome to Elite Tech Park Program', {
+            icon: '✨',
+            style: {
+              borderRadius: '10px',
+              background: '#333',
+              color: '#fff',
+            },
+          });
         });
-      });
     } catch (error) {
       console.log(`Error: ${error}`);
       toast.error('Something went Wrong!', {
@@ -81,7 +83,7 @@ const Context = ({ children }) => {
         return;
       }
       await axios
-        .post('http://localhost:4000/api/studentRegister', {
+        .post('https://elite-nwwo.onrender.com/api/studentRegister', {
           name,
           email,
           phone,
@@ -134,7 +136,7 @@ const Context = ({ children }) => {
   const handleEdit = async (id, updatedDetails) => {
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/studentEdit/${id}`,
+        `https://elite-nwwo.onrender.com/api/studentEdit/${id}`,
         updatedDetails
       );
       if (response.data.status === true) {
@@ -180,7 +182,9 @@ const Context = ({ children }) => {
   useEffect(() => {
     const fetchStudentNames = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/lookup');
+        const response = await axios.get(
+          'https://elite-nwwo.onrender.com/api/lookup'
+        );
         console.log(response);
         if (response.data.status) {
           setStudentNames(response.data.data);
@@ -216,7 +220,7 @@ const Context = ({ children }) => {
   const fetchStudentDetails = async (studentId) => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/student/${studentId}`
+        `https://elite-nwwo.onrender.com/api/student/${studentId}`
       );
       if (response.data.status) {
         const { email, phone, address, percentage } = response.data.data;
@@ -268,7 +272,7 @@ const Context = ({ children }) => {
   const handleSave = async (id) => {
     try {
       await axios.put(
-        `http://localhost:4000/api/studentUpdate/${id}`,
+        `https://elite-nwwo.onrender.com/api/studentUpdate/${id}`,
         editedValues
       );
       setIsEditMode(false);
@@ -306,7 +310,7 @@ const Context = ({ children }) => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:4000/api/selectedStudentDelete/${id}`
+        `https://elite-nwwo.onrender.com/api/selectedStudentDelete/${id}`
       );
       toast.success('Student deleted successfully', {
         icon: '🗑️',

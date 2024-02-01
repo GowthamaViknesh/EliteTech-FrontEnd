@@ -48,7 +48,9 @@ const StudentDetails = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/studentDelete/${id}`);
+      await axios.delete(
+        `https://elite-nwwo.onrender.com/api/studentDelete/${id}`
+      );
       toast.success('Student deleted successfully', {
         icon: '🗑️',
         style: {

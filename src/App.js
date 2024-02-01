@@ -6,6 +6,9 @@ import Context from './Context/context';
 import StudentDetails from './Pages/StudentDetails';
 import Navbar from './Components/Navbar';
 import SelectedStudentForm from './Pages/SelectedStudentDetails';
+// import axios from 'axios';
+
+// axios.defaults.baseURL = 'https://elite-nwwo.onrender.com';
 
 function App() {
   return (
